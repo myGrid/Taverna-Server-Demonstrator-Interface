@@ -1,0 +1,23 @@
+%p
+  This page shows a subset of the information about the workflow.  To see the type of useful information that can be shown about a workflow please visit
+  - if ($allow_upload) then
+    %a{:href => "http://www.myexperiment.org"}
+      myExperiment.
+  - else
+    the workflow on
+    %a{:href => "http://www.myexperiment.org/workflows/#{number}.html"}
+      myExperiment.
+%dl
+  %dt Name
+  %dd= "#{annotation.name}"
+  - if ((annotation.titles != nil) && !annotation.titles.empty?) then
+    %dt Title
+    %dd= "#{annotation.titles[0]}"
+  - if ((annotation.descriptions != nil) && !annotation.descriptions.empty?) then
+    %dt Description
+    %dd= "#{annotation.descriptions[0]}"
+  - if ((annotation.authors != nil) && !annotation.authors.empty?) then
+    %dt Author(s)
+    %dd= "#{annotation.authors[0]}"
+%p
+  %a{:href =>"#{request.url}/newrun"}Create run

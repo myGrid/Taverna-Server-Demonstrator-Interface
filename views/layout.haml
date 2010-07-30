@@ -1,0 +1,58 @@
+!!! XML
+!!!
+%html
+  %head
+    %title= "#{title}"
+    == 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+
+    == <link rel="shortcut icon" href="http://www.taverna.org.uk/pages/wp-content/themes/myGrid-Taverna/library/media/images/favicon.ico" />
+    == <link rel="apple-touch-icon" href="http://www.taverna.org.uk/pages/wp-content/themes/myGrid-Taverna/library/media/images/iphone.png" />
+
+    == <link rel="stylesheet" href="/css/reset.css" type="text/css" media="screen, projection" /> 
+    == <link rel="stylesheet" href="/css/taverna-server.css" type="text/css" media="screen, projection" /> 
+
+    - if (defined?(refresh) && refresh)
+      == <meta http-equiv="refresh" content="5" />
+    == <meta name='robots' content='noindex,nofollow' />
+    == <link rel="canonical" href="http://www.taverna.org.uk" />
+
+    == <style type="text/css">.broken_link, a.broken_link {
+    ==  text-decoration: line-through;
+    == }</style>
+  %body
+    .upper-wrap
+      .header
+        .container
+          #logo				
+            .taverna-wheel-logo
+              %a{:href => "/"}
+                %img{:src => "/images/taverna-server-logo92x92.png", :alt => "Taverna Server"}
+
+            %a.header-title{:href => "http://www.taverna.org.uk"}
+              = "Taverna Server 2.2 R 1 Demonstrator"
+
+
+          .taverna-logo
+            %a{:href => "http://www.taverna.org.uk/",  :target => "_blank"}
+              %img{:src => "/images/taverna-wheel-logo.png", :alt => "myGrid"}
+
+      .container
+        .menu
+          %ul.nav
+            %li.page_item
+              %a{:href => "/workflows"}
+                = "Workflows"
+            %li.page_item
+              %a{:href => "/runs"}
+                = "Runs"
+            %li.page_item
+              %a{:href => "/configuration"}
+                = "Configuration"
+    .container#container-main
+      #content
+        .hfeed#primary
+          .outer-enclosed
+            - if (defined?(refresh) && refresh)
+              %p= "This page automatically refreshes every 5 seconds"
+            .hentry
+              = yield

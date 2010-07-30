@@ -1,0 +1,29 @@
+%table.bordered_table{:"title" => "Run"}
+  %tr
+    %th= "Identification"
+    %th= "Status"
+    %th= "Creation time"
+    %th= "Finish time"
+    %th= "Results"
+    %th= "Action"
+  %tr
+    %td= "#{run.uuid}"
+    %td= "#{run.status}"
+    %td= "#{Time.parse(run.create_time).utc}"
+    %td
+      - if (run.finished?) then
+        #{Time.parse(run.finish_time).utc}
+      - else
+        = ""
+    %td
+      - if (run.finished?) then
+        %a{:href =>"/run/#{run.uuid}/resultset"}Results
+      - else
+        = ""
+    %td
+      - if (run.finished?) then
+        %form{:method => "link", :action => "/run/#{run.uuid}/delete"}
+          %input{:type => "submit", :value=>"Delete", :class => "button"}
+      - else
+        %form{:method => "link", :action => "/run/#{run.uuid}/delete"}
+          %input{:type => "submit", :value=>"Cancel", :class => "button"}

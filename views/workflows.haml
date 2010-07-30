@@ -1,0 +1,24 @@
+- if (!$allow_upload) then
+  %p
+    The following workflows are derived from the myExperiment starter
+    %a{:href => 'http://www.myexperiment.org/packs/122.html'}
+      pack
+    for
+    %a{:href => 'http://www.taverna.org.uk/documentation/taverna-2-x'}
+      Taverna 2.2
+%ul
+  - workflow_array = workflow_map.sort
+  - workflow_array.each do |a|
+    - k = a[0]
+    - v = a[1]
+    %li
+      %a{:href => "/workflow/#{v}"}
+        = k
+- if ($allow_uploads) then
+  %p
+    Upload a workflow
+  %form{:action => "", :enctype => "multipart/form-data", :method => "post"}
+    %fieldset
+      %input{:type => "file", :name => "workflow", :size => 40}
+    %fieldset
+      %input{:type => "submit", :value => "Upload", :class => "button"}

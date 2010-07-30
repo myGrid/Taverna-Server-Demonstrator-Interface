@@ -1,0 +1,8 @@
+- if (defined?(problem)) then
+  %p= "There is a problem with the configuration.  Please change the URI."
+%form{:action => "/configuration", :method => "post"}
+  %fieldset
+    %fieldset
+      %label{:for => "server_uri"} Server URI
+      %input{:type => "text", :name => "server_uri", :class => "text", :size => "80", :value => "#{server_uri}"}
+    %input{:type => "submit", :value => "Change", :class => "button"}

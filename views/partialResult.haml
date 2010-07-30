@@ -1,0 +1,10 @@
+%ol
+  - sorted_hash = sub_hash.sort {|x,y| x[0].to_i <=> y[0].to_i}
+  - sorted_hash.each do |a|
+    - value = a[1]
+    %li
+      - if value.is_a?(Hash) then
+        = haml :partialResult, :layout => false, :locals => {:runid => runid, :sub_hash => value}
+      - else
+        %a{:href => "/run/#{runid}/result/#{value}"}
+          = 'value'

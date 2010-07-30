@@ -1,0 +1,41 @@
+%h1= 'Runs'
+- if (!(current_runs.empty?)) then
+  #current-runs
+    %table{:"title" => "Current runs", :"border" => "1"}
+      %caption= "Current runs"
+      %tr
+        %th= "Identification"
+        %th= "Creation time"
+        %th= "Action"
+      - current_runs.each do |r|
+        %tr
+          %td= "#{r.uuid}"
+          %td= "#{Time.parse(r.create_time()).utc}"
+          %td
+            %form{:method => "link", :action => "/run/#{r.uuid}/delete"}
+              %input{:type => "submit", :value=>"Cancel", :class => "button"}
+- if (!(finished_runs.empty?)) then
+  #finished-runs
+    %table{:"title" => "Finished runs", :"border" => "1"}
+      %caption= "Finished runs"
+      %tr
+        %th= "Identification"
+        %th= "Creation time"
+        %th= "Finish time"
+        %th= "Results"
+        %th= "Action"
+      - finished_runs.each do |r|
+        %tr
+          %td= "#{r.uuid}"
+          %td= "#{Time.parse(r.create_time()).utc}"
+          %td= "#{Time.parse(r.finish_time()).utc}"
+          %td
+            - if (r.exitcode == 0) then
+              %a{:href =>"/run/#{r.uuid}/resultset"}Results
+            - else
+              %a{:href => "/run/#{r.uuid}/error"}Error
+          %td
+            %form{:method => "link", :action => "/run/#{r.uuid}/delete"}
+              %input{:type => "submit", :value=>"Delete", :class => "button"}
+%form{:method => "link", :action => "/runs/delete_all"}
+  %input{:type => "submit", :value=>"Delete all runs", :class => "button"}

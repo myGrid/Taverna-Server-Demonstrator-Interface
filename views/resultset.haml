@@ -1,0 +1,11 @@
+- if sinks.empty?
+  %p= "The workflow has no output ports"
+- else
+  - sinks.each do |name, value|
+    %h2= "Data on port #{name}"
+    - if value.is_a?(Hash)
+      = haml :partialResult, :layout => false, :locals => {:runid => runid, :sub_hash => value}
+    - else
+      %p
+        %a{:href => "/run/#{runid}/result/#{value}"}
+          = 'value'
