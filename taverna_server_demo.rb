@@ -1,4 +1,4 @@
-# Copyrigh (c) 2010-2012, University of Manchester, UK
+# Copyright (c) 2010-2012, University of Manchester, UK
 # 
 # All rights reserved.
 # 
