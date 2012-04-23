@@ -1,5 +1,4 @@
-
-# Copyrigh (c) 2010, University of Manchester, UK
+# Copyrigh (c) 2010-2012, University of Manchester, UK
 # 
 # All rights reserved.
 # 
@@ -16,7 +15,7 @@
 #     * Neither the name of the University of Manchester nor the names
 #       of its contributors may be used to endorse or promote products
 #       derived from this software without specific prior written
-#       permission. 
+#       permission.
 # 
 # THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
 # "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
@@ -31,27 +30,19 @@
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 require 'rubygems'
-
+require "bundler/setup"
 require 'open-uri'
 require 'libxml'
-
 require 'sinatra'
 require 'haml'
-
-gem 'taverna-t2flow'
-
 require 't2flow/model'
 require 't2flow/parser'
-
 require 't2-server'
-
 require 'mimemagic'
-
 require 'ftools'
+require 'yaml'
 
 include LibXML
-
-require 'yaml'
 
 set :port, 9494
 
