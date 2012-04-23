@@ -1,2 +1,2 @@
 --- 
-server_uri: http://127.0.0.1:8080/taverna-server
+server_uri: http://localhost:8080/server-webapp-2.3

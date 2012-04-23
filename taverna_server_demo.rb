@@ -1,4 +1,5 @@
-# Copyright (c) 2010, University of Manchester, UK
+
+# Copyrigh (c) 2010, University of Manchester, UK
 # 
 # All rights reserved.
 # 
@@ -42,7 +43,7 @@ gem 'taverna-t2flow'
 require 't2flow/model'
 require 't2flow/parser'
 
-require 't2server'
+require 't2-server'
 
 require 'mimemagic'
 
@@ -52,8 +53,12 @@ include LibXML
 
 require 'yaml'
 
+set :port, 9494
+
 $server = nil;
 $server_uri = ""
+
+$credentials = T2Server::HttpBasic.new("taverna", "taverna")
 
 # Change this value to allow users to upload new workflows
 $allow_upload = false;
@@ -72,8 +77,9 @@ def get_name(model)
     end
 
 def fetch_workflows()
-  packWorkflows = open("http://www.myexperiment.org/pack.xml?id=122&elements=internal-pack-items").read
+  packWorkflows = open("http://www.myexperiment.org/pack.xml?id=192&elements=internal-pack-items").read
   packWorkflowsXml = XML::Parser.string(packWorkflows).parse
+  i = 1
   packWorkflowsXml.find("//workflow").each { |packItem|
     packItemUrl =  packItem.attributes["uri"]
     packItemText = open(packItemUrl).read
@@ -82,13 +88,28 @@ def fetch_workflows()
       workflowItemUrl = workflowItem.attributes["uri"]
       workflowItemText = open(workflowItemUrl).read
       workflowItemXml = XML::Parser.string(workflowItemText).parse
-      workflowId = workflowItemXml.find_first("//id").content
+      workflowId = i
+      i = i.next
       workflowItemXml.find("//content-uri").each { |workflowUri|
         workflowText = open(workflowUri.content).read
-    	File.open(@workflowsDirectoryPath + "/" + workflowId + ".t2flow", 'w') { |f| f.write(workflowText)}    
+    	File.open(@workflowsDirectoryPath + "/" + workflowId.to_s + ".t2flow", 'w') { |f| f.write(workflowText)}    
       }
     }
   }
+end
+
+def show_port_value(portValue)
+  if (portValue.error?) then
+    portValue.error
+  else
+    value = portValue.value
+    mimetype = MimeMagic.by_magic(value.to_s)
+    if (mimetype == nil) then
+      mimetype = 'text/plain'
+    end
+    content_type mimetype.to_s, :charset => 'utf-8'
+    value
+  end
 end
 
 def check_server()
@@ -97,7 +118,7 @@ def check_server()
     if settings
       $server_uri = settings['server_uri']
       begin
-       $server = T2Server::Server.connect($server_uri)
+       $server = T2Server::Server.new($server_uri)
       rescue Exception => e  
         $server = nil
         redirect '/no_configuration'
@@ -106,6 +127,13 @@ def check_server()
       redirect '/no_configuration'
     end
   end
+end
+
+def add_security(run)
+  run.add_password_credential("http://heater.cs.man.ac.uk:7070/#Example+HTTP+BASIC+Authentication", "testuser", "testpasswd")
+  run.add_password_credential("https://heater.cs.man.ac.uk:7070/#Example+HTTP+BASIC+Authentication", "testuser", "testpasswd")
+  run.add_password_credential("https://heater.cs.man.ac.uk:7443/axis/services/HelloService-PlaintextPassword?wsdl", "testuser", "testpasswd")
+  run.add_trust(Dir.getwd() + "/certificates/tomcat_heater_certificate.pem")
 end
 
 get '/no_configuration' do
@@ -152,7 +180,7 @@ get '/runs' do
   check_server()
   current_runs = []
   finished_runs = []
-  $server.runs.each { |r|
+  $server.runs($credentials).each { |r|
     if (r.finished?) then
       finished_runs.push(r)
     else
@@ -180,9 +208,10 @@ get '/workflow/:number/newrun' do
   workflowContent =  open(filePath).read
   model = T2Flow::Parser.new.parse(File.open(filePath))
   if (model.all_sources().size == 0) then
-    run = $server.create_run(workflowContent)
+    run = $server.create_run(workflowContent, $credentials)
+    add_security(run)
     run.start()
-    redirect "/run/#{run.uuid}"
+    redirect "/run/#{run.identifier}"
   else 
     name = get_name(model)
     sources = {}
@@ -203,27 +232,28 @@ post '/workflow/:number/newrun' do
   filePath = Dir.getwd() + "/workflows/" + params[:number] + ".t2flow";
   workflowContent =  open(filePath).read
   model = T2Flow::Parser.new.parse(File.open(filePath))
-  run = $server.create_run(workflowContent)
+  run = $server.create_run(workflowContent, $credentials)
   model.all_sources().each { |source|
     tf = Tempfile.new("t2server")
     tf.write(params[source.name])
     tf.close
     run.upload_input_file(source.name, tf.path)
   }
+  add_security(run)
   run.start()
-  redirect "/run/#{run.uuid}"
+  redirect "/run/#{run.identifier}"
 end
 
 get '/run/:runid' do
   check_server()
-  run = $server.run(params[:runid])
-  haml :run, :locals => {:title => "Run " + run.uuid, :run => run, :refresh => true}
+  run = $server.run(params[:runid], $credentials)
+  haml :run, :locals => {:title => "Run " + run.identifier, :run => run, :refresh => true}
 end
 
 get '/run/:runid/delete' do
   check_server()
   begin
-    $server.delete_run(params[:runid])
+    $server.delete_run(params[:runid], $credentials)
   rescue Exception => e
     # Do not know what to do
   end
@@ -232,57 +262,48 @@ end
 
 get '/runs/delete_all' do
   check_server()
-  $server.delete_all_runs()
+  $server.delete_all_runs($credentials)
   redirect '/runs'
-end
-
-def get_results(run, dir="")
-  result = {}
-  dirs,files = run.ls("out#{dir}")
-  dirs.each {|d| result[d] = get_results(run, "#{dir}/#{d}") }
-  files.each do |f|
-    if dir == ""
-      output_name = f
-    else
-      output_name = "#{dir[1..-1]}/#{f}"
-    end
-    result [f] = output_name
-  end
-  result
 end
 
 get '/run/:runid/resultset' do
   check_server()
-  run = $server.run(params[:runid])
-  begin
-    resultMap = get_results(run)
-  rescue Exception => e
-    resultMap = {}
-  end
-  sinks = {}
-  resultMap.each { |k, v| sinks[k] = v }
+  run = $server.run(params[:runid], $credentials)
   runid = params[:runid]
-  haml :resultset, :locals => {:title => "Results for run " + runid, :runid => runid, :sinks => sinks}
+  haml :resultset, :locals => {:title => "Results for run " + runid, :runid => runid, :outputs => run.output_ports}
 end
 
 get '/run/:runid/error' do
   check_server()
   runid = params[:runid]
-  run = $server.run(runid)
+  run = $server.run(runid, $credentials)
   error = run.stderr
   haml :run_error, :locals => {:title => "Server error for run " + runid, :error => error}
 end
 
-get '/run/:runid/result/*' do
+get '/run/:runid/result/:portname' do
   check_server()
-  run = $server.run(params[:runid])
-  value = run.get_output(params[:splat][0])
-  mimetype = MimeMagic.by_magic(value.to_s)
-  if (mimetype == nil) then
-    mimetype = 'text/plain'
+  run = $server.run(params[:runid], $credentials)
+  puts "portname is " + params[:portname]
+  o = run.output_ports[params[:portname]]
+  show_port_value(o)
+end
+
+get '/run/:runid/result/:portname/:indices' do
+  check_server()
+  run = $server.run(params[:runid], $credentials)
+  o = run.output_ports[params[:portname]]
+  indices = params[:indices]
+  if indices.match(/^-/)
+    indices = indices[1..-1]
   end
-  content_type mimetype.to_s, :charset => 'utf-8'
-  value
+  indices.split('-').each do |i|
+    puts "i is "
+    puts i
+    puts o
+    o = o[i.to_i]
+  end
+  show_port_value(o)
 end
 
 get '/configuration' do
@@ -302,8 +323,10 @@ post '/configuration' do
     $server_uri = $server_uri[0..$server_uri.length-6]
   end
   begin
-    $server = T2Server::Server.connect($server_uri)
+    puts $server_uri
+    $server = T2Server::Server.new($server_uri)
   rescue Exception => e
+    puts e.message
     $server = nil
     redirect '/badconfiguration'
   end    
