@@ -1,10 +1,9 @@
 %ol
-  - sorted_hash = sub_hash.sort {|x,y| x[0].to_i <=> y[0].to_i}
-  - sorted_hash.each do |a|
-    - value = a[1]
+  - (0 .. sub_array.length - 1).each do |i|
+    - value = sub_array[i]
     %li
-      - if value.is_a?(Hash) then
-        = haml :partialResult, :layout => false, :locals => {:runid => runid, :sub_hash => value}
+      - if value.is_a?(Array) then
+        = haml :partialResult, :layout => false, :locals => {:runid => runid, :portname => portname, :sub_array => value, :indices => "#{indices}-#{i}"}
       - else
-        %a{:href => "/run/#{runid}/result/#{value}"}
-          = 'value'
+        %a{:href => "/run/#{runid}/result/#{portname}/#{indices}-#{i}"}
+          = "#{i}"
