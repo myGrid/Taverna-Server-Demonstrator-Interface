@@ -1,0 +1,6 @@
+*~
+*.bak
+.project
+.buildpath
+config.yaml
+
