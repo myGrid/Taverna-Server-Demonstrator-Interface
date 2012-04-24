@@ -27,3 +27,5 @@
       - else
         %form{:method => "link", :action => "/run/#{run.identifier}/delete"}
           %input{:type => "submit", :value=>"Cancel", :class => "button"}
+- unless interaction_uri.nil?
+  %iframe{ :width => "100%", :height => "300", :scrolling => "auto", :src => "#{interaction_uri}" }

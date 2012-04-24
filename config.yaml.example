@@ -1,2 +1,3 @@
 --- 
 server_uri: http://localhost:8080/server-webapp-2.3
+feed_uri: http://localhost:8081/feed
