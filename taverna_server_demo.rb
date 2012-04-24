@@ -41,6 +41,7 @@ require 't2-server'
 require 'mimemagic'
 require 'ftools'
 require 'yaml'
+require 'atom'
 
 include LibXML
 
@@ -48,6 +49,8 @@ set :port, 9494
 
 $server = nil;
 $server_uri = ""
+$feed_uri = ""
+$feed_ns = "http://ns.taverna.org.uk/2012/interaction"
 
 $credentials = T2Server::HttpBasic.new("taverna", "taverna")
 
@@ -108,6 +111,7 @@ def check_server()
     settings = YAML.load(IO.read(File.join(File.dirname(__FILE__), "config.yaml")))
     if settings
       $server_uri = settings['server_uri']
+      $feed_uri = settings['feed_uri'] + "?limit=1000"
       begin
        $server = T2Server::Server.new($server_uri)
       rescue Exception => e  
@@ -125,6 +129,55 @@ def add_security(run)
   run.add_password_credential("https://heater.cs.man.ac.uk:7070/#Example+HTTP+BASIC+Authentication", "testuser", "testpasswd")
   run.add_password_credential("https://heater.cs.man.ac.uk:7443/axis/services/HelloService-PlaintextPassword?wsdl", "testuser", "testpasswd")
   run.add_trust(Dir.getwd() + "/certificates/tomcat_heater_certificate.pem")
+end
+
+# This method simply returns the *first* entry in the interaction feed which
+# does not have a reply - it is a MASSIVE BODGE.
+def get_interaction(since)
+  feed = Atom::Feed.load_feed(URI.parse($feed_uri))
+  replies = []
+  interaction = nil
+
+  # Go through all the entries in reverse order and return the first which
+  # does not have a reply.
+  feed.each_entry do |entry|
+    next if entry.updated < since
+    r_id = entry[$feed_ns, "in-reply-to"]
+    replies << r_id unless r_id.empty?
+  end
+
+  feed.entries.reverse_each do |entry|
+    next if entry.updated < since
+    id = entry[$feed_ns, "id"]
+    unless id.empty?
+      unless replies.include? id
+        interaction = entry
+        break
+      end
+    end
+  end
+
+  # Return nil if there are no interactions
+  return [nil, nil] if interaction.nil?
+
+  # Get the interaction link from the feed entry
+  interaction.links.each do |link|
+    if link.rel == "presentation"
+      return [interaction[$feed_ns, "id"][0], link.to_s]
+    end
+  end
+
+  # Should not get here but return nil just in case...
+  [nil, nil]
+end
+
+def check_for_reply(id)
+  feed = Atom::Feed.load_feed(URI.parse($feed_uri))
+  feed.each_entry do |entry|
+    return true if entry[$feed_ns, "in-reply-to"][0] == id
+  end
+
+  false
 end
 
 get '/no_configuration' do
@@ -235,7 +288,12 @@ end
 get '/run/:runid' do
   check_server()
   run = $server.run(params[:runid], $credentials)
-  haml :run, :locals => {:title => "Run " + run.identifier, :run => run, :refresh => true}
+
+  interaction_id, interaction_uri = get_interaction(run.start_time)
+
+  haml :run, :locals => {:title => "Run " + run.identifier, :run => run,
+    :interaction_id => interaction_id, :interaction_uri => interaction_uri,
+    :refresh => true}
 end
 
 get '/run/:runid/delete' do
@@ -295,7 +353,7 @@ get '/run/:runid/result/:portname/:indices' do
 end
 
 get '/configuration' do
-  haml :configuration, :locals => {:title => "Configuration", :server_uri => $server_uri}
+  haml :configuration, :locals => {:title => "Configuration", :server_uri => $server_uri, :feed_uri => $feed_uri}
 end
 
 get '/badconfiguration' do
@@ -326,3 +384,12 @@ post '/configuration' do
   redirect '/'
 end
 
+get '/interaction/:intid' do
+  reply = check_for_reply(params['intid'])
+
+  if reply
+    headers["X-taverna-reply"] = "true"
+  end
+
+  204
+end

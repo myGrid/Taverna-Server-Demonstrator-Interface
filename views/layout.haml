@@ -12,7 +12,12 @@
     == <link rel="stylesheet" href="/css/taverna-server.css" type="text/css" media="screen, projection" /> 
 
     - if (defined?(refresh) && refresh)
-      == <meta http-equiv="refresh" content="5" />
+      %script(src="/javascript/reload.js")
+      - if (defined?(interaction_uri) && !interaction_uri.nil?)
+        %script(src="/javascript/right.js")
+        %script
+          noReload = true
+          int_id = "#{interaction_id}"
     == <meta name='robots' content='noindex,nofollow' />
     == <link rel="canonical" href="http://www.taverna.org.uk" />
 
