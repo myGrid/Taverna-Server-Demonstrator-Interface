@@ -198,7 +198,7 @@ get '/workflow/:number/newrun' do
   filePath = Dir.getwd() + "/workflows/" + params[:number] + ".t2flow";
   workflowContent =  open(filePath).read
   model = T2Flow::Parser.new.parse(File.open(filePath))
-  if (model.all_sources().size == 0) then
+  if (model.sources().size == 0) then
     run = $server.create_run(workflowContent, $credentials)
     add_security(run)
     run.start()
@@ -206,9 +206,9 @@ get '/workflow/:number/newrun' do
   else 
     name = get_name(model)
     sources = {}
-    model.all_sources().each { |source|
+    model.sources().each { |source|
       example_values = source.example_values
-      if (defined?(example_values) && (example_values.size == 1)) then
+      if ((!example_values.nil?) && (example_values.size == 1)) then
         sources[source.name] = example_values[0]
       else
         sources[source.name] = ""
@@ -224,11 +224,8 @@ post '/workflow/:number/newrun' do
   workflowContent =  open(filePath).read
   model = T2Flow::Parser.new.parse(File.open(filePath))
   run = $server.create_run(workflowContent, $credentials)
-  model.all_sources().each { |source|
-    tf = Tempfile.new("t2server")
-    tf.write(params[source.name])
-    tf.close
-    run.upload_input_file(source.name, tf.path)
+  model.sources().each { |source|
+    run.input_port(source.name).value = params[source.name]
   }
   add_security(run)
   run.start()
