@@ -1,12 +1,5 @@
 %p
-  This page shows a subset of the information about the workflow.  To see the type of useful information that can be shown about a workflow please visit
-  - if ($allow_upload) then
-    %a{:href => "http://www.myexperiment.org"}
-      myExperiment.
-  - else
-    the workflow on
-    %a{:href => "http://www.myexperiment.org/workflows/#{number}.html"}
-      myExperiment.
+  This page shows a subset of the information known about the workflow.
 %dl
   %dt Name
   %dd= "#{annotation.name}"

@@ -54,8 +54,7 @@ $feed_ns = "http://ns.taverna.org.uk/2012/interaction"
 
 $credentials = T2Server::HttpBasic.new("taverna", "taverna")
 
-# Change this value to allow users to upload new workflows
-$allow_upload = false;
+$runWorkflowNameMap = {}
 
 def get_name(model)
       return nil if model.nil?
@@ -69,6 +68,14 @@ def get_name(model)
         model.annotations.name
       end
     end
+
+def get_run_workflow_name(run)
+  workflowName = $runWorkflowNameMap[run.identifier]
+  if (workflowName == nil) then
+    return run.identifier 
+  end
+  return workflowName
+end
 
 def fetch_workflows()
   packWorkflows = open("http://www.myexperiment.org/pack.xml?id=192&elements=internal-pack-items").read
@@ -133,13 +140,20 @@ end
 
 # This method simply returns the *first* entry in the interaction feed unless it
 # is a reply - it is a MASSIVE BODGE.
-def get_interaction(since)
+def get_interaction(run)
   feed = Atom::Feed.load_feed(URI.parse($feed_uri))
   interaction = nil
 
   # Go through all the entries in reverse order and return the first which
   # does not have a reply.
   feed.each_entry do |entry|
+    entry_run_id = entry[$feed_ns, "run-id"]
+    if (entry_run_id.empty?)
+       next
+    end
+    unless (entry_run_id[0] == run.identifier)
+      next
+    end
     r_id = entry[$feed_ns, "in-reply-to"]
     if r_id.empty?
       interaction = entry
@@ -160,15 +174,6 @@ def get_interaction(since)
 
   # Should not get here but return nil just in case...
   [nil, nil]
-end
-
-def check_for_reply(id)
-  feed = Atom::Feed.load_feed(URI.parse($feed_uri))
-  feed.each_entry do |entry|
-    return true if entry[$feed_ns, "in-reply-to"][0] == id
-  end
-
-  false
 end
 
 get '/no_configuration' do
@@ -215,10 +220,12 @@ get '/runs' do
   check_server()
   current_runs = []
   finished_runs = []
+  name_map = {}
   puts $server
   puts $credentials
   all_runs = $server.runs($credentials)
   all_runs.each { |r|
+    name_map[r] = get_run_workflow_name(r)
     if (r.finished?) then
       finished_runs.push(r)
     else
@@ -227,7 +234,7 @@ get '/runs' do
   }
   current_runs.sort! {|x,y| y.create_time().to_s <=> x.create_time().to_s}
   finished_runs.sort! {|x,y| y.create_time().to_s <=> x.create_time().to_s}
-  haml :runs, :locals => {:title => "Runs", :current_runs => current_runs, :finished_runs => finished_runs, :refresh => true}
+  haml :runs, :locals => {:title => "Runs", :current_runs => current_runs, :finished_runs => finished_runs, :workflow_name_map => name_map, :refresh => true}
 end
 
 get '/workflow/:number' do
@@ -245,13 +252,14 @@ get '/workflow/:number/newrun' do
   filePath = Dir.getwd() + "/workflows/" + params[:number] + ".t2flow";
   workflowContent =  open(filePath).read
   model = T2Flow::Parser.new.parse(File.open(filePath))
+  name = get_name(model)
   if (model.sources().size == 0) then
     run = $server.create_run(workflowContent, $credentials)
+    $runWorkflowNameMap[run.identifier] = name
     add_security(run)
     run.start()
     redirect "/run/#{run.identifier}"
   else 
-    name = get_name(model)
     sources = {}
     model.sources().each { |source|
       example_values = source.example_values
@@ -270,7 +278,9 @@ post '/workflow/:number/newrun' do
   filePath = Dir.getwd() + "/workflows/" + params[:number] + ".t2flow";
   workflowContent =  open(filePath).read
   model = T2Flow::Parser.new.parse(File.open(filePath))
+  name = get_name(model)
   run = $server.create_run(workflowContent, $credentials)
+  $runWorkflowNameMap[run.identifier] = name
   model.sources().each { |source|
     run.input_port(source.name).value = params[source.name]
   }
@@ -283,10 +293,11 @@ get '/run/:runid' do
   check_server()
   run = $server.run(params[:runid], $credentials)
 
-  interaction_id, interaction_uri = get_interaction(run.start_time)
+  interaction_id, interaction_uri = get_interaction(run)
 
-  haml :run, :locals => {:title => "Run " + run.identifier, :run => run, :run_id => run.identifier,
+  haml :run, :locals => {:title => "Run " + run.identifier, :run => run,
     :interaction_id => interaction_id, :interaction_uri => interaction_uri,
+    :workflow_name => get_run_workflow_name(run),
     :refresh => true}
 end
 
@@ -381,7 +392,7 @@ end
 get '/:runid/interaction/:intid' do
   run = $server.run(params[:runid], $credentials)
 
-  top_id, top_url = get_interaction(run.start_time)
+  top_id, top_url = get_interaction(run)
 
   unless top_id == params[:intid]
     headers["X-taverna-superseded"] = "true"

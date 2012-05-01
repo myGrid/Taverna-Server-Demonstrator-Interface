@@ -1,11 +1,6 @@
 - if (!$allow_upload) then
   %p
-    The following workflows are derived from the myExperiment starter
-    %a{:href => 'http://www.myexperiment.org/packs/192.html'}
-      pack
-    for
-    %a{:href => 'http://www.taverna.org.uk/documentation/taverna-2-x'}
-      Taverna 2.3
+    These workflows show how biodiversity-related workflows can be run on a Taverna Server.
 %ul
   - workflow_array = workflow_map.sort
   - workflow_array.each do |a|

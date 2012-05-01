@@ -1,8 +1,11 @@
+%script(src="/javascript/upload.js")
+
 %form{:action => "", :method => "post"}
   %fieldset
     - sources.each do |source_name, example|
       %fieldset
         %h2= "Input for port #{source_name}"
-        %textarea{:name => "#{source_name}", :rows => "10", :cols => "80"}
+        %textarea{:name => "#{source_name}", :id => "#{source_name}-id", :rows => "10", :cols => "80"}
           = "#{example}"
+        %input{:type => "file", :id=>"#{source_name}-upload", :onchange =>"uploadFile(this.files, \"#{source_name}-id\")"}
     %input{:type => "submit", :value => "Run", :class => "button"}

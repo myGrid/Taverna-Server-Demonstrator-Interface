@@ -110,7 +110,7 @@ margin-bottom: 20px;*/ }
 /* Document Body */
 body, input, textarea { font: 13px/1.5 Arial, Helvetica, sans-serif; }
 /*body, input, textarea { font: 13px/1.5 Georgia, "Times New Roman", Times, serif; }*/
-body { background-color: #DCE5EF; }
+body { background-color: #ffffcc; }
 
 /* Font Styles */
 .serif { font-family: Arial, Helvetica, sans-serif; /*font-family: Georgia, "Times New Roman", Times, serif;*/ }
@@ -124,17 +124,17 @@ p, pre, ul, ol, dl, dd, blockquote, address, table, fieldset, form, .gallery-row
 /*.footer p { margin: 0; }*/
 
 /* Logo */
-#logo, .header-title { font-size: 36px; line-height: 30px; color: #fff; /*font-weight: bold;*/ }
+#logo, .header-title { font-size: 36px; line-height: 30px; color: #287621; /*font-weight: bold;*/ }
 .header-title:hover { color: #ddd; text-decoration: none; }
 #tagline { color: #333; }
 
 /* Menu */
-.nav { font-size: 17px; font-family: Helvetica, Arial, sans-serif; float: left; line-height: 1; background-color: #7589a1; width: 100%; }
+.nav { font-size: 17px; font-family: Helvetica, Arial, sans-serif; float: left; line-height: 1; background-color: #ffffcc; color: #287621; width: 100%; }
 .nav, .nav * { list-style: none; margin-left: 0; }
 .nav li { float: left; padding: 0; position: relative; }
 .nav ul li { font-size: 14px; width: 100%; }
 
-.nav a { display: block; position: relative;  padding: 6px 14px; }
+.nav a { display: block; position: relative; color: #287621;  padding: 6px 14px; }
 
 /* Hides items under top menu */
 .nav ul { position: absolute; top: -9999em; width: 20em; /* left offset of submenus need to match (see below) */ }
@@ -179,8 +179,8 @@ p, pre, ul, ol, dl, dd, blockquote, address, table, fieldset, form, .gallery-row
 .nav li:hover ul,
 .nav li.nav-hover ul { background: #414c58; }
 
-.nav a { color: #fff; /*border-right: 1px solid #ccc;*/ }
-.nav a:hover { text-decoration: none; background: #414c58; }
+.nav a { color: #287621; /*border-right: 1px solid #ccc;*/ }
+.nav a:hover { text-decoration: none; background: #414c58; color: #ffffcc}
 .nav ul li a:hover {background: #596776;}
 .nav ul a { border-right: none; }
 .nav li:hover, .nav li.nav-hover,
@@ -361,11 +361,11 @@ border-color: #777 #ccc #ccc #777; }
 
 
 /* ************************ from css/screen.css ********************* */
-.upper-wrap { background-color: #a8c1d3; }
-.header{ background-color: #7589a1; }
+.upper-wrap { background-color: #eeeb99; }
+.header{ background-color: #ffffcc; }
 
 #container-main { 
-    background-color: #dce5ef; 
+    background-color: #ffffcc; 
     margin-top: 5px;    
     margin-bottom: 5px;    
 }
@@ -409,7 +409,7 @@ border-color: #777 #ccc #ccc #777; }
             -webkit-border-radius: 10px; 
             word-wrap: break-word ;}
 
-.outer-enclosed { background: #c7d4e1; padding: 15px; margin-bottom: 5px; -moz-border-radius: 10px;
+.outer-enclosed { background: #eeeb99; color: #287621; padding: 15px; margin-bottom: 5px; -moz-border-radius: 10px;
 -webkit-border-radius: 10px; word-wrap: break-word;}
 
 .external-link { padding-top: 0px; padding-right: 13px; padding-bottom: 0px; 

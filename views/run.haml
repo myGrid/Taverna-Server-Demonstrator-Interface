@@ -1,5 +1,3 @@
-%p
-  #{refresh}
 %table.bordered_table{:"title" => "Run"}
   %tr
     %th= "Identification"
@@ -9,7 +7,7 @@
     %th= "Results"
     %th= "Action"
   %tr
-    %td= "#{run.identifier}"
+    %td= "#{workflow_name}"
     %td= "#{run.status}"
     %td= "#{run.create_time.utc}"
     %td
