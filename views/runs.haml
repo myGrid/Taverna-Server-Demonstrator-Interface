@@ -9,8 +9,9 @@
         %th= "Action"
       - current_runs.each do |r|
         %tr
-          %td= "#{r.identifier}"
-          %td= "#r.create_time().utc}"
+          %td
+            %a{:href => "/run/#{r.identifier}"} #{workflow_name_map[r]}
+          %td= "#{r.create_time().utc}"
           %td
             %form{:method => "link", :action => "/run/#{r.identifier}/delete"}
               %input{:type => "submit", :value=>"Cancel", :class => "button"}
@@ -26,7 +27,8 @@
         %th= "Action"
       - finished_runs.each do |r|
         %tr
-          %td= "#{r.identifier}"
+          %td
+            %a{:href => "/run/#{r.identifier}"} #{workflow_name_map[r]}
           %td= "#{r.create_time().utc}"
           %td= "#{r.finish_time().utc}"
           %td

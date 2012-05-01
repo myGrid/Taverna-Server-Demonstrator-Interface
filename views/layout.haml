@@ -17,7 +17,7 @@
         %script(src="/javascript/right.js")
         %script
           autoReload = false
-          run_id = "#{run_id}"
+          run_id = "#{run.identifier}"
           int_id = "#{interaction_id}"
       - else
         %script
@@ -35,10 +35,10 @@
           #logo				
             .taverna-wheel-logo
               %a{:href => "/"}
-                %img{:src => "/images/taverna-server-logo92x92.png", :alt => "Taverna Server"}
+                %img{:src => "/images/biovel.png", :alt => "Taverna Server"}
 
             %a.header-title{:href => "http://www.taverna.org.uk"}
-              = "Taverna Server 2.3 Demonstrator"
+              = "BioVeL Taverna Server 2.4 Demonstrator"
 
 
           .taverna-logo
@@ -54,14 +54,9 @@
             %li.page_item
               %a{:href => "/runs"}
                 = "Runs"
-            %li.page_item
-              %a{:href => "/configuration"}
-                = "Configuration"
     .container#container-main
       #content
         .hfeed#primary
           .outer-enclosed
-            - if (defined?(refresh) && refresh)
-              %p= "This page automatically refreshes every 5 seconds"
             .hentry
               = yield
