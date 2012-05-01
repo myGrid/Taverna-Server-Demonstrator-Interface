@@ -131,30 +131,21 @@ def add_security(run)
   run.add_trust(Dir.getwd() + "/certificates/tomcat_heater_certificate.pem")
 end
 
-# This method simply returns the *first* entry in the interaction feed which
-# does not have a reply - it is a MASSIVE BODGE.
+# This method simply returns the *first* entry in the interaction feed unless it
+# is a reply - it is a MASSIVE BODGE.
 def get_interaction(since)
   feed = Atom::Feed.load_feed(URI.parse($feed_uri))
-  replies = []
   interaction = nil
 
   # Go through all the entries in reverse order and return the first which
   # does not have a reply.
   feed.each_entry do |entry|
-    next if entry.updated < since
     r_id = entry[$feed_ns, "in-reply-to"]
-    replies << r_id unless r_id.empty?
-  end
-
-  feed.entries.reverse_each do |entry|
-    next if entry.updated < since
-    id = entry[$feed_ns, "id"]
-    unless id.empty?
-      unless replies.include? id
-        interaction = entry
-        break
-      end
+    if r_id.empty?
+      interaction = entry
+      puts "Found interaction " + interaction[$feed_ns, "id"][0]
     end
+    break
   end
 
   # Return nil if there are no interactions
@@ -224,7 +215,10 @@ get '/runs' do
   check_server()
   current_runs = []
   finished_runs = []
-  $server.runs($credentials).each { |r|
+  puts $server
+  puts $credentials
+  all_runs = $server.runs($credentials)
+  all_runs.each { |r|
     if (r.finished?) then
       finished_runs.push(r)
     else
@@ -232,7 +226,7 @@ get '/runs' do
     end
   }
   current_runs.sort! {|x,y| y.create_time().to_s <=> x.create_time().to_s}
-  finished_runs.sort! {|x,y| y.create_time() <=> x.create_time()}
+  finished_runs.sort! {|x,y| y.create_time().to_s <=> x.create_time().to_s}
   haml :runs, :locals => {:title => "Runs", :current_runs => current_runs, :finished_runs => finished_runs, :refresh => true}
 end
 
@@ -291,7 +285,7 @@ get '/run/:runid' do
 
   interaction_id, interaction_uri = get_interaction(run.start_time)
 
-  haml :run, :locals => {:title => "Run " + run.identifier, :run => run,
+  haml :run, :locals => {:title => "Run " + run.identifier, :run => run, :run_id => run.identifier,
     :interaction_id => interaction_id, :interaction_uri => interaction_uri,
     :refresh => true}
 end
@@ -384,11 +378,13 @@ post '/configuration' do
   redirect '/'
 end
 
-get '/interaction/:intid' do
-  reply = check_for_reply(params['intid'])
+get '/:runid/interaction/:intid' do
+  run = $server.run(params[:runid], $credentials)
 
-  if reply
-    headers["X-taverna-reply"] = "true"
+  top_id, top_url = get_interaction(run.start_time)
+
+  unless top_id == params[:intid]
+    headers["X-taverna-superseded"] = "true"
   end
 
   204

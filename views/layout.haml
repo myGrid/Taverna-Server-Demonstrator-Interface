@@ -16,8 +16,12 @@
       - if (defined?(interaction_uri) && !interaction_uri.nil?)
         %script(src="/javascript/right.js")
         %script
-          noReload = true
+          autoReload = false
+          run_id = "#{run_id}"
           int_id = "#{interaction_id}"
+      - else
+        %script
+          autoReload = true
     == <meta name='robots' content='noindex,nofollow' />
     == <link rel="canonical" href="http://www.taverna.org.uk" />
 

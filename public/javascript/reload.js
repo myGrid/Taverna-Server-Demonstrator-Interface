@@ -29,11 +29,11 @@
 // (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-var noReload = false
+var autoReload = true
 
 /* Reload the page */
 function forceReload() {
-  if (!noReload) {
+  if (autoReload) {
     location.reload(true)
   }
   else {
@@ -42,14 +42,16 @@ function forceReload() {
 }
 
 function pollFeed() {
-  Xhr.load("/interaction/" + int_id, {
+  Xhr.load("/" + run_id + "/interaction/" + int_id, {
     method: 'head',
     onSuccess: function(request) {
-      reply = request.getHeader("X-taverna-reply")
+      reply = request.getHeader("X-taverna-superseded")
       if (reply == "true") {
-        noReload = false
+        autoReload = true
       }
-    }
+	  },
+	      onFailure: function(request) {
+	  }
   });
 }
 
