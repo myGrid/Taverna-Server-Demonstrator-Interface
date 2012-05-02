@@ -18,14 +18,18 @@
 .container { width: 950px; margin: 0 auto 7px auto; }
 #content { min-height: 600px; }
 
-.taverna-wheel-logo { position: relative; float:left; width: 92px; height: 92px; }
-.taverna-wheel-logo img {position: absolute; top: -8px; left: 10px; }
+.biovel-logo { position: relative; float:left; width: 92px; height: 92px; }
+.biovel-logo img {position: absolute; top: -8px; left: 10px; }
+
+.taverna-logo { position: relative; float: right; width: 92px; height: 92px; }
+.taverna-logo img {position: absolute; top: -8px; right: 10px; }
+
 .header-title { float: left; margin: 14px 0 0 3px; font-weight: bolder;}
 
 .omii-uk-logo { float: right; height: 56px;/* background: #8699af;*/ padding: 29px 9px; }
 .mygrid-logo { float: right; margin-top: 6px; margin-right: 20px;}
 
-.menu { padding-right: 1px; }
+.menu { padding-right: 1px; overflow:  auto}
 .menu ul {
     margin-bottom: 0px;
     background: url("/images/gradient.png/") repeat scroll 0 0 transparent;
@@ -143,7 +147,7 @@ p, pre, ul, ol, dl, dd, blockquote, address, table, fieldset, form, .gallery-row
 
 /* Logo */
 #logo, .header-title { font-size: 36px; line-height: 30px; color: #287621; /*font-weight: bold;*/ }
-.header-title:hover { color: #ddd; text-decoration: none; }
+.header-title:hover { text-decoration: none; }
 #tagline { color: #333; }
 
 /* Menu */
@@ -425,11 +429,12 @@ border-color: #777 #ccc #ccc #777; }
 .outer-enclosed {
     background: #FFFFCC;
     color: #333;
-    padding: 15px;
+    padding: 25px 15px 15px 15px;
     word-wrap: break-word;
     border-style: solid;
     border-width: 0 1px 1px 1px;
     border-color: #bbb866;
+    min-height: 600px;
 }
 
 .external-link { padding-top: 0px; padding-right: 13px; padding-bottom: 0px; 
@@ -448,19 +453,6 @@ border-color: #777 #ccc #ccc #777; }
 	-webkit-border-radius: 10px;
 	}
 
-ul.index_options {
-    list-style-type: none;
-}
-
-ul.index_options li a {
-    display: inline-block;
-    padding: 5px;
-    background-color: #eeeb99;
-    border-radius: 5px;
-    width: 15em;
-    margin: 5px;
-    font-size: 150%;
-}
 
 .nav .page_item {
     width: 8em;
@@ -473,7 +465,7 @@ ul.index_options li a {
     background-image: url("/images/gradient_green.png");
     border-width: 0 1px;
     border-style: solid;
-    border-color: transparent #bbea3e transparent #99cc33;
+    border-color: transparent #99cc33 transparent #99cc33;
 }
 
 .nav .page_item img {
@@ -483,8 +475,6 @@ ul.index_options li a {
 .nav .page_item a {
     color: black;
 }
-
-
 
 .clearer {
     clear: both;
