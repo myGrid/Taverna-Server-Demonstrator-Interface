@@ -44,15 +44,17 @@
           .taverna-logo
             %a{:href => "http://www.taverna.org.uk/",  :target => "_blank"}
               %img{:src => "/images/taverna-wheel-logo.png", :alt => "myGrid"}
-
+      .clearer
       .container
         .menu
           %ul.nav
             %li.page_item
               %a{:href => "/workflows"}
+                %img{:src => "/images/cog.png", :alt => "Workflows"}
                 = "Workflows"
             %li.page_item
               %a{:href => "/runs"}
+                %img{:src => "/images/table.png", :alt => "Workflow Runs"}
                 = "Runs"
     .container#container-main
       #content
