@@ -11,8 +11,8 @@
     height: 60px;
     margin-bottom: 10px;
     border-style: solid;
-    border-width: 0 1px;
-    border-color: #bbb866;
+    border-width: 1px;
+    border-color: #77BB11 #bbb866;
 }
 
 .container { width: 950px; margin: 0 auto 7px auto; }
@@ -427,7 +427,7 @@ border-color: #777 #ccc #ccc #777; }
             word-wrap: break-word ;}
 
 .outer-enclosed {
-    background: #FFFFCC;
+    background: url("/images/cogs.jpg") repeat-y top right #FFFFCC;
     color: #333;
     padding: 25px 15px 15px 15px;
     word-wrap: break-word;
