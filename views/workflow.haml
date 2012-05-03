@@ -7,19 +7,20 @@
   = '&raquo;'
   = "#{annotation.name}"
 
-%p
-  This page shows a subset of the information known about the workflow.
-%dl
-  %dt Name
-  %dd= "#{annotation.name}"
-  - if ((annotation.titles != nil) && !annotation.titles.empty?) then
-    %dt Title
-    %dd= "#{annotation.titles[0]}"
-  - if ((annotation.descriptions != nil) && !annotation.descriptions.empty?) then
-    %dt Description
-    %dd= "#{annotation.descriptions[0]}"
-  - if ((annotation.authors != nil) && !annotation.authors.empty?) then
-    %dt Author(s)
-    %dd= "#{annotation.authors[0]}"
-%p
-  %a.button{:href =>"#{request.url}/newrun"}Create run
+- if ((annotation.titles != nil) && !annotation.titles.empty?) then
+  %h1="#{annotation.titles[0]}"
+- else
+  %h1="Workflow"
+
+.workflow
+  %dl
+    %dt Name
+    %dd= "#{annotation.name}"
+    - if ((annotation.descriptions != nil) && !annotation.descriptions.empty?) then
+      %dt Description
+      %dd= "#{annotation.descriptions[0]}"
+    - if ((annotation.authors != nil) && !annotation.authors.empty?) then
+      %dt Author(s)
+      %dd= "#{annotation.authors[0]}"
+  %p
+    %a.button{:href =>"#{request.url}/newrun"}Create run

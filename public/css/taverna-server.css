@@ -15,7 +15,7 @@
 }
 
 .container { width: 950px; margin: 0 auto; }
-#content { min-height: 600px; }
+#content {  }
 
 .biovel-logo { position: relative; float:left; width: 92px; height: 92px; }
 .biovel-logo img {position: absolute; top: -8px; left: 10px; }
@@ -135,7 +135,7 @@ margin-bottom: 20px;*/ }
 /* ******************** from css/base.css ********************* */
 
 /* Document Body */
-body, input, textarea { font: 13px/1.5 Arial, Helvetica, sans-serif; }
+body, input, textarea { font: 16px/1.5 Helvetica, Arial, sans-serif; }
 /*body, input, textarea { font: 13px/1.5 Georgia, "Times New Roman", Times, serif; }*/
 body { background-color: #EEEB99; }
 
@@ -343,7 +343,7 @@ button:hover, input[type=submit]:hover {
   text-decoration: none;
 }
 
-input:focus, textarea:focus, button:hover { background: #fff; border-color: #99cc33; }
+input:focus, textarea:focus, button:hover { background: #fff; border-color: #BBEA3E; }
 
 /* bugfix */
 .safari input { padding: 0px 3px; }
@@ -442,9 +442,9 @@ img.aligncenter { margin-left: auto; margin-right: auto; display: block; clear: 
     padding: 5px 15px 15px 15px;
     word-wrap: break-word;
     border-style: solid;
-    border-width: 0 1px 1px 1px;
+    border-width: 0 1px;
     border-color: #bbb866;
-    min-height: 600px;
+    min-height: 400px;
 }
 
 .external-link { padding-top: 0px; padding-right: 13px; padding-bottom: 0px; 
@@ -502,6 +502,7 @@ td, th { border: 1px solid #666;}
 
 table {
   border-collapse: collapse;
+  font-size: 13px;
 }
 
 th {
@@ -551,7 +552,7 @@ td.finished {
 }
 
 td.running {
-  color: #dec21a;
+  color: #333;
 }
 
 td.error {
@@ -561,9 +562,10 @@ td.error {
 a.result_value {
   border: 1px solid #ccc;
   background-color: #FFF;
-  padding: 2px 8px;
+  padding: 0px 8px;
   display:inline-block;
   color: black;
+  margin-bottom: 3px;
 }
 
 a.result_value:hover {
@@ -576,19 +578,20 @@ a.result_value img {
 }
  
 a.button {
-   line-height: 30px;
-   padding: 0px 20px;
-   cursor: pointer;
-   background: url("/images/gradient.png/") repeat scroll 0 0 transparent;
-   border-width: 1px 1px 1px 1px;
-   border-style: solid;
-   border-color: #ddda88 #ddda88 #bbb866 #ddda88;
-   border-radius: 0;
-   font-weight: bold;
-   color: black;
+  line-height: 30px;
+  padding: 0px 20px;
+  cursor: pointer;
+  background: url("/images/gradient.png/") repeat scroll 0 0 transparent;
+  border-width: 1px 1px 1px 1px;
+  border-style: solid;
+  border-color: #ddda88 #ddda88 #bbb866 #ddda88;
+  border-radius: 0;
+  font-weight: bold;
+  color: black;
   font-size: 14px;
   display: inline-block;
- }
+  margin-left: 1em;
+}
  
 a.button:hover {
    background-image: url("/images/gradient_green.png");
@@ -601,8 +604,34 @@ h4 {
   font-weight: bold;
 }
 
-.port_results {
+.port_results, .workflow {
   border: 1px dotted #bbb866;
   padding: 0.5em;
   margin: 1em 0;
+  background-image: url("/images/white30.png");
+}
+
+.index_text {
+  font-size: 150%;
+  margin-top: 1em;
+}
+
+.index_text img {
+  display: block;
+  margin: auto;
+  border: 1px solid #666;
+}
+
+#footer {
+  background-color: #99cc33;
+  padding: 1.5em;
+  font-weight: bold;
+  color: #355710;
+  vertical-align: middle;
+  border: 1px solid #77BB11;
+}
+
+#footer img {
+  margin-right: 1em;
+  vertical-align: middle;
 }
