@@ -1,3 +1,9 @@
+.breadcrumb
+  %a{:href => "/"}
+    = "Home"
+  = '&raquo;'
+  = "Workflows"
+
 %h1= 'Workflows'
 - if (!$allow_upload) then
   %p

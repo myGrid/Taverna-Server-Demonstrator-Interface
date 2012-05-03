@@ -1,8 +1,14 @@
+.breadcrumb
+  %a{:href => "/"}
+    = "Home"
+  = '&raquo;'
+  = "Runs"
+
 %h1= 'Runs'
 - if (!(current_runs.empty?)) then
+  %h2= 'In Progress'
   #current-runs
-    %table{:"title" => "Current runs", :"border" => "1"}
-      %caption= "Current runs"
+    %table{:"title" => "Current runs" }
       %tr
         %th= "Identification"
         %th= "Creation time"
@@ -16,9 +22,9 @@
             %form{:method => "link", :action => "/run/#{r.identifier}/delete"}
               %input{:type => "submit", :value=>"Cancel", :class => "button"}
 - if (!(finished_runs.empty?)) then
+  %h2= 'Finished'
   #finished-runs
     %table{:"title" => "Finished runs", :"border" => "1"}
-      %caption= "Finished runs"
       %tr
         %th= "Identification"
         %th= "Creation time"

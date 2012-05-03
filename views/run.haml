@@ -1,3 +1,14 @@
+.breadcrumb
+  %a{:href => "/"}
+    = "Home"
+  = '&raquo;'
+  %a{:href => "/runs"}
+    = "Runs"
+  = '&raquo;'
+  = "#{run.identifier}"
+
+%h1='Run Information'
+
 %table.bordered_table{:"title" => "Run"}
   %tr
     %th= "Identification"
@@ -8,18 +19,18 @@
     %th= "Action"
   %tr
     %td= "#{workflow_name}"
-    %td= "#{run.status}"
+    %td{:class => "#{run.status.to_s}"}= "#{run.status.to_s.capitalize}"
     %td= "#{run.create_time.utc}"
     %td
       - if (run.finished?) then
         #{run.finish_time.utc}
       - else
-        = ""
-    %td
+        = "n/a"
+    %td.results
       - if (run.finished?) then
-        %a{:href =>"/run/#{run.identifier}/resultset"}Results
+        %a{:href =>"/run/#{run.identifier}/resultset", :title => "Click here to view the results of the run"}Results
       - else
-        = ""
+        %img{:src => "/images/spinner.gif", :alt => "Waiting..."}
     %td
       - if (run.finished?) then
         %form{:method => "link", :action => "/run/#{run.identifier}/delete"}

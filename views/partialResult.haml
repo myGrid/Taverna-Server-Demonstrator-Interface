@@ -1,9 +1,11 @@
-%ol
+%img{:src => "/images/folder.png", :alt => "List", :title => "List #{indices}"}
+%ul.list_result
   - (0 .. sub_array.length - 1).each do |i|
     - value = sub_array[i]
     %li
       - if value.is_a?(Array) then
         = haml :partialResult, :layout => false, :locals => {:runid => runid, :portname => portname, :sub_array => value, :indices => "#{indices}-#{i}"}
       - else
-        %a{:href => "/run/#{runid}/result/#{portname}/#{indices}-#{i}"}
-          = "#{i}"
+        %a{:href => "/run/#{runid}/result/#{portname}/#{indices}-#{i}", :class => "result_value"}
+          %img{:src => "/images/page.png", :alt => "Value"}
+          = "View value #{i}"
