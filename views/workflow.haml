@@ -1,3 +1,12 @@
+.breadcrumb
+  %a{:href => "/"}
+    = "Home"
+  = '&raquo;'
+  %a{:href => "/workflows"}
+    = "Workflows"
+  = '&raquo;'
+  = "#{annotation.name}"
+
 %p
   This page shows a subset of the information known about the workflow.
 %dl
@@ -13,4 +22,4 @@
     %dt Author(s)
     %dd= "#{annotation.authors[0]}"
 %p
-  %a{:href =>"#{request.url}/newrun"}Create run
+  %a.button{:href =>"#{request.url}/newrun"}Create run

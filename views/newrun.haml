@@ -1,3 +1,16 @@
+.breadcrumb
+  %a{:href => "/"}
+    = "Home"
+  = '&raquo;'
+  %a{:href => "/workflows"}
+    = "Workflows"
+  = '&raquo;'
+  %a{:href => "/workflow/#{params[:number]}"}
+    = "#{name}"
+  = '&raquo;'
+  = 'New Run'
+
+
 %script(src="/javascript/upload.js")
 
 %form{:action => "", :method => "post"}
@@ -5,7 +18,9 @@
     - sources.each do |source_name, example|
       %fieldset
         %h2= "Input for port #{source_name}"
-        %textarea{:name => "#{source_name}", :id => "#{source_name}-id", :rows => "10", :cols => "80"}
-          = "#{example}"
-        %input{:type => "file", :id=>"#{source_name}-upload", :onchange =>"uploadFile(this.files, \"#{source_name}-id\")"}
+        %p
+          %textarea{:name => "#{source_name}", :id => "#{source_name}-id", :rows => "6", :cols => "70"}
+            = "#{example}"
+        %p
+          %input{:type => "file", :id=>"#{source_name}-upload", :onchange =>"uploadFile(this.files, \"#{source_name}-id\")"}
     %input{:type => "submit", :value => "Run", :class => "button"}

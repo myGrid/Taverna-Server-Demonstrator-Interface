@@ -2,7 +2,6 @@
 
 .upper-wrap {
     margin: 0 auto;
-    height: 120px;
     padding-top: 12px;
     position: relative;
     width: 950px;
@@ -15,7 +14,7 @@
     border-color: #77BB11 #bbb866;
 }
 
-.container { width: 950px; margin: 0 auto 7px auto; }
+.container { width: 950px; margin: 0 auto; }
 #content { min-height: 600px; }
 
 .biovel-logo { position: relative; float:left; width: 92px; height: 92px; }
@@ -29,13 +28,19 @@
 .omii-uk-logo { float: right; height: 56px;/* background: #8699af;*/ padding: 29px 9px; }
 .mygrid-logo { float: right; margin-top: 6px; margin-right: 20px;}
 
-.menu { padding-right: 1px; overflow:  auto}
+.menu {
+  padding-right: 1px;
+  overflow:  hidden;
+  background: url("/images/gradient.png/") repeat scroll 0 0 transparent;
+  border-width: 1px 1px 1px 0;
+  border-style: solid;
+  border-color: #77BB11 #ddda88 #bbb866;
+}
+
 .menu ul {
-    margin-bottom: 0px;
-    background: url("/images/gradient.png/") repeat scroll 0 0 transparent;
-    border-width: 1px 1px 1px 0;
-    border-style: solid;
-    border-color: #77BB11 #ddda88 #ddda88;
+  margin-bottom: 0px;
+  width: auto;
+  border-right: 1px solid #DDDA88;
 }
 
 #content { /*padding-top: 10px;*/ }
@@ -307,17 +312,38 @@ dt { font-weight: bold; }
 
 .fat li { margin-bottom: 10px; }
 
-/* Tables */
-table .even { background: #ddd; }
-caption { text-align: left; }
-table.padded-table td, table.padded-table th { padding: 10px 10px 10px 10px;}
-td, tr, th { border: 1px solid #444; padding: 10px 10px 10px 10px;}
-
 /* Forms */
-input, textarea, button { background: #fafafa; border-color: #aaa #ddd #ddd #aaa; border-style: solid; border-width: 1px; color: #444; font-size: 14px; }
-input, textarea, button { font-family: Cambria, Georgia, "Times New Roman", Times, serif; padding: 3px; }
-button { font-size: 12px; padding: 2px 10px; cursor: pointer; }
-input:focus, textarea:focus, button:hover { background: #fff; border-color: #777 #ccc #ccc #777; }
+input, textarea, button {
+  background: #f7f7f7;
+  border: 1px solid #bbb866;
+  border-radius: 5px;
+  color: #444;
+  font-size: 14px;
+  padding: 3px;
+}
+textarea {
+  padding: 8px;
+}
+
+button, input[type=submit] {
+  height: 30px;
+  padding: 0 20px;
+  cursor: pointer;
+  background: url("/images/gradient.png/") repeat scroll 0 0 transparent;
+  border-width: 1px 1px 1px 1px;
+  border-style: solid;
+  border-color: #ddda88 #ddda88 #bbb866 #ddda88;
+  border-radius: 0;
+  font-weight: bold;
+}
+
+button:hover, input[type=submit]:hover {
+  background-image: url("/images/gradient_green.png");
+  border-color: #BBEA3E #99cc33 #99cc33 #99cc33;
+  text-decoration: none;
+}
+
+input:focus, textarea:focus, button:hover { background: #fff; border-color: #99cc33; }
 
 /* bugfix */
 .safari input { padding: 0px 3px; }
@@ -361,22 +387,6 @@ img.aligncenter { margin-left: auto; margin-right: auto; display: block; clear: 
 .feedback textarea, .feedback input {
       margin-left: 0;
 }
-
-input.field, textarea, button { 
-    background: #fafafa; border-color: #aaa #ddd #ddd #aaa; border-style: solid; border-width: 1px;
-    color: #444; font-size: 14px; 
-}
-
-input.field, textarea, button { 
-    font-family: Cambria, Georgia, "Times New Roman", Times, serif; padding: 3px; 
-}
-
-button { 
-    font-size: 12px; padding: 2px 10px; cursor: pointer; 
-}
-
-input.field:focus, textarea:focus, button:hover { background: #fff;
-border-color: #777 #ccc #ccc #777; }
 
 
 /* ************************ from css/screen.css ********************* */
@@ -429,7 +439,7 @@ border-color: #777 #ccc #ccc #777; }
 .outer-enclosed {
     background: url("/images/cogs.jpg") repeat-y top right #FFFFCC;
     color: #333;
-    padding: 25px 15px 15px 15px;
+    padding: 5px 15px 15px 15px;
     word-wrap: break-word;
     border-style: solid;
     border-width: 0 1px 1px 1px;
@@ -478,4 +488,121 @@ border-color: #777 #ccc #ccc #777; }
 
 .clearer {
     clear: both;
+}
+
+
+/* Tables */
+table .even { background: #ddd; }
+
+caption { text-align: left; }
+
+td, th {  padding: 0 10px;}
+
+td, th { border: 1px solid #666;}
+
+table {
+  border-collapse: collapse;
+}
+
+th {
+  background-image: url("/images/gradient_green.png");
+  font-size: 120%;
+  font-weight: bold;
+  height: 30px;
+}
+
+td {
+  background-color: #fff;
+}
+
+td input[type=submit] {
+  margin-top: 1em;
+}
+
+td.results {
+  text-align: center;
+}
+
+iframe {
+  border: 1px dashed #999;
+  background-color: #fff;
+}
+
+ul.list_result {
+  list-style-type: none;
+  margin-left: 8px;
+}
+
+ul.list_result li {
+  padding-left: 16px;
+  background: url("/images/child.png") no-repeat left top;
+}
+
+div.breadcrumb {
+  margin-bottom: 1em;
+}
+
+fieldset {
+  margin-bottom: 5px;
+}
+
+td.finished {
+  color: #73b817;
+}
+
+td.running {
+  color: #dec21a;
+}
+
+td.error {
+  color: #a60000;
+}
+
+a.result_value {
+  border: 1px solid #ccc;
+  background-color: #FFF;
+  padding: 2px 8px;
+  display:inline-block;
+  color: black;
+}
+
+a.result_value:hover {
+  text-decoration: none;
+  background-color: #CF5;
+}
+
+a.result_value img {
+  vertical-align: middle;
+}
+ 
+a.button {
+   line-height: 30px;
+   padding: 0px 20px;
+   cursor: pointer;
+   background: url("/images/gradient.png/") repeat scroll 0 0 transparent;
+   border-width: 1px 1px 1px 1px;
+   border-style: solid;
+   border-color: #ddda88 #ddda88 #bbb866 #ddda88;
+   border-radius: 0;
+   font-weight: bold;
+   color: black;
+  font-size: 14px;
+  display: inline-block;
+ }
+ 
+a.button:hover {
+   background-image: url("/images/gradient_green.png");
+   border-color: #BBEA3E #99cc33 #99cc33 #99cc33;
+   text-decoration: none;
+ }
+
+h4 {
+  margin-top: 0.5em;
+  font-weight: bold;
+}
+
+.port_results {
+  border: 1px dotted #bbb866;
+  padding: 0.5em;
+  margin: 1em 0;
 }

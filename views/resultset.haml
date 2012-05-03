@@ -1,11 +1,27 @@
+.breadcrumb
+  %a{:href => "/"}
+    = "Home"
+  = '&raquo;'
+  %a{:href => "/runs"}
+    = "Runs"
+  = '&raquo;'
+  %a{:href => "/run/#{runid}"}
+    = "#{runid}"
+  = '&raquo;'
+  = 'Results'
+
+%h1='Results'
+
 - if outputs.empty?
   %p= "The workflow has no output ports"
 - else
   - outputs.each do |name, port|
-    %h2= "Data on port #{name} of depth #{port.depth}"
-    - if port.value.is_a?(Array)
-      = haml :partialResult, :layout => false, :locals => {:runid => runid, :portname => name, :sub_array => port.value, :indices => ''}
-    - else
-      %p
-        %a{:href => "/run/#{runid}/result/#{name}"}
-          = 'value'
+    .port_results
+      %h4= "#{name} (depth #{port.depth})"
+      - if port.value.is_a?(Array)
+        = haml :partialResult, :layout => false, :locals => {:runid => runid, :portname => name, :sub_array => port.value, :indices => ''}
+      - else
+        %p
+          %a{:href => "/run/#{runid}/result/#{name}", :class => "result_value"}
+            %img{:src => "/images/page.png", :alt => "Value"}
+            = 'View value'
