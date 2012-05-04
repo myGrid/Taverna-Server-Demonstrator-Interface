@@ -525,8 +525,8 @@ td.results {
 }
 
 iframe {
-  border: 1px dashed #999;
-  background-color: #fff;
+  border: 1px dashed #bbb866;
+  background-image: url("/images/white30.png");
 }
 
 ul.list_result {
