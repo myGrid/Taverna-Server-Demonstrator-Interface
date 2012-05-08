@@ -38,10 +38,7 @@
           %td= "#{r.create_time().utc}"
           %td= "#{r.finish_time().utc}"
           %td
-            - if (r.exitcode() == 0) then
-              %a{:href =>"/run/#{r.identifier}/resultset"}Results
-            - else
-              %a{:href => "/run/#{r.identifier}/error"}Error
+            %a{:href =>"/run/#{r.identifier}/resultset"}Results
           %td
             %form{:method => "link", :action => "/run/#{r.identifier}/delete"}
               %input{:type => "submit", :value=>"Delete", :class => "button"}
