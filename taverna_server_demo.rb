@@ -300,7 +300,7 @@ get '/run/:runid' do
   haml :run, :locals => {:title => "Run " + run.identifier, :run => run,
     :interaction_id => interaction_id, :interaction_uri => interaction_uri,
     :workflow_name => get_run_workflow_name(run),
-    :refresh => true}
+    :refresh => !run.finished?}
 end
 
 get '/run/:runid/delete' do
