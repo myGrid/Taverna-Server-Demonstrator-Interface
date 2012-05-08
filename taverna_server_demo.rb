@@ -263,6 +263,7 @@ get '/workflow/:number/newrun' do
     redirect "/run/#{run.identifier}"
   else 
     sources = {}
+    descriptions = {}
     model.sources().each { |source|
       example_values = source.example_values
       if ((!example_values.nil?) && (example_values.size == 1)) then
@@ -270,8 +271,14 @@ get '/workflow/:number/newrun' do
       else
         sources[source.name] = ""
       end
+      description_values = source.descriptions
+      if ((!description_values.nil?) && (description_values.size == 1)) then
+        descriptions[source.name] = description_values[0]
+      else
+        descriptions[source.name] = ""
+      end
     }
-    haml :newrun, :locals => {:title => "New run of " + name, :name => name, :sources => sources}
+    haml :newrun, :locals => {:title => "New run of " + name, :name => name, :sources => sources, :descriptions => descriptions}
   end
 end
 
