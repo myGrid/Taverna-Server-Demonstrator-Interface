@@ -48,6 +48,7 @@ function pollFeed() {
       reply = request.getHeader("X-taverna-superseded")
       if (reply == "true") {
         autoReload = true
+	location.reload(true)
       }
 	  },
 	      onFailure: function(request) {
@@ -55,4 +56,4 @@ function pollFeed() {
   });
 }
 
-window.setInterval("forceReload()", 5000)
+window.setInterval("forceReload()", 15000)
