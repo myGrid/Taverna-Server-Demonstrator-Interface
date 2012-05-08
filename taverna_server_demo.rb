@@ -56,6 +56,8 @@ $credentials = T2Server::HttpBasic.new("taverna", "taverna")
 
 $runWorkflowNameMap = {}
 
+set :haml, :format => :html5
+
 def get_name(model)
       return nil if model.nil?
       if model.annotations.name.empty? || model.annotations.name=~/^(workflow|dataflow)\d*$/i
@@ -232,8 +234,8 @@ get '/runs' do
       current_runs.push(r)
     end
   }
-  current_runs.sort! {|x,y| y.create_time().to_s <=> x.create_time().to_s}
-  finished_runs.sort! {|x,y| y.create_time().to_s <=> x.create_time().to_s}
+  current_runs.sort! {|x,y| y.create_time() <=> x.create_time()}
+  finished_runs.sort! {|x,y| y.create_time() <=> x.create_time()}
   haml :runs, :locals => {:title => "Runs", :current_runs => current_runs, :finished_runs => finished_runs, :workflow_name_map => name_map, :refresh => true}
 end
 
