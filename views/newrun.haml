@@ -17,7 +17,9 @@
   %fieldset
     - sources.each do |source_name, example|
       %fieldset
-        %h2= "Input for port #{source_name}"
+        %h2= "Input for #{source_name}"
+        %p
+          = "#{descriptions[source_name]}"
         %p
           %textarea{:name => "#{source_name}", :id => "#{source_name}-id", :rows => "6", :cols => "70"}
             = "#{example}"
