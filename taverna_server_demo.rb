@@ -295,6 +295,7 @@ get '/run/:runid/result/:portname/:indices' do
 end
 
 get '/configuration' do
+  check_server()
   haml :configuration, :locals => {:title => "Configuration", :server_uri => $server_uri}
 end
 
